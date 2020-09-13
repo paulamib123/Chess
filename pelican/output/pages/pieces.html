@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Pieces</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Chess Project</a></h1>
+                <nav><ul>
+                    <li><a href="/pages/overview.html">Overview</a></li>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li><a href="/pages/checkmove.html">Checkmove</a></li>
+                    <li><a href="/pages/introduction.html">Introduction</a></li>
+                    <li><a href="/pages/driver-code.html">Driver Code</a></li>
+                    <li><a href="/pages/notation.html">Notation</a></li>
+                    <li><a href="/pages/pawn.html">Pawn</a></li>
+                    <li><a href="/pages/pgn-parser.html">PGN Parser</a></li>
+                    <li class="active"><a href="/pages/pieces.html">Pieces</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Pieces</h1>
+    
+    <p>This script consists of the followinng functions:</p>
+<h4><strong>1. castle()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">castle</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">):</span>
+
+    <span class="n">home_rank</span><span class="p">,</span> <span class="n">king</span><span class="p">,</span> <span class="n">rook</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span> <span class="k">if</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;O&quot;</span> <span class="k">else</span> <span class="s2">&quot;8&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span>
+
+    <span class="n">king_before</span> <span class="o">=</span> <span class="s2">&quot;e&quot;</span> <span class="o">+</span> <span class="n">home_rank</span>
+    <span class="n">rook_before</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">move</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">home_rank</span>
+
+    <span class="n">king_after</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;c&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">move</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="s2">&quot;g&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">home_rank</span>
+    <span class="n">rook_after</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;d&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">move</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="s2">&quot;f&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">home_rank</span>
+
+    <span class="n">board_view</span><span class="p">[</span><span class="n">king_before</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+    <span class="n">board_view</span><span class="p">[</span><span class="n">king_after</span><span class="p">]</span> <span class="o">=</span> <span class="n">king</span>
+
+    <span class="n">board_view</span><span class="p">[</span><span class="n">rook_before</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+    <span class="n">board_view</span><span class="p">[</span><span class="n">rook_after</span><span class="p">]</span> <span class="o">=</span> <span class="n">rook</span>
+
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">king</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">king_after</span><span class="p">]</span>
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">rook</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rook_after</span><span class="p">)</span>
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">rook</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">rook_before</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span>
+</code></pre></div>
+
+
+<p>This function is used to make the castling move.</p>
+<p>It finds the current position of the king and rook and also the final position of the king and rook and removes the king and rook from their current positions and adds them to the final position.</p>
+<p>This function returns the board view and the piece view after castling.</p>
+<h4><strong>2. not_blocked()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">not_blocked</span><span class="p">(</span><span class="n">board_view</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">:</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+
+        <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">between</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="s2">&quot;12345678&quot;</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">between</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="s2">&quot;12345678&quot;</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">f</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">between</span> <span class="o">=</span> <span class="n">DIAGONAL</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">board_view</span><span class="p">[</span><span class="n">sq</span><span class="p">]</span> <span class="k">for</span> <span class="n">sq</span> <span class="ow">in</span> <span class="n">between</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">SPACE</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">between</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>This function checks i their is any other piece present between the current position and the final position.</p>
+<p>It first creates a list of pieces between the current and final position and returns 'True' if the count of spaces in the list is same as the length of the list i.e there are empty blocks between the final and current positions. It returns 'False' if there is a single piece present between the current position and the final position.</p>
+<h4><strong>3. get_from_square()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_from_square</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">candidates</span><span class="p">):</span>
+    <span class="n">piece</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">to_square</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="n">piece</span> <span class="ow">in</span> <span class="s2">&quot;nN&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">from_square</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">checkmove</span><span class="o">.</span><span class="n">check_move</span><span class="p">(</span><span class="n">piece</span><span class="p">,</span> <span class="n">from_square</span><span class="p">,</span> <span class="n">to_square</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">from_square</span>
+    <span class="k">for</span> <span class="n">from_square</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">checkmove</span><span class="o">.</span><span class="n">check_move</span><span class="p">(</span><span class="n">piece</span><span class="p">,</span> <span class="n">from_square</span><span class="p">,</span> <span class="n">to_square</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">not_blocked</span><span class="p">(</span><span class="n">board_view</span><span class="p">,</span> <span class="n">from_square</span><span class="p">,</span> <span class="n">to_square</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">from_square</span>
+</code></pre></div>
+
+
+<p>This function is used to get the current position of the piece if the if it is not specified in the pgn notation.</p>
+<p>It takes a list of candidates i.e the list of position of the piece and then checks if the move from the current position to the final position is valid. </p>
+<p>If it is any piece other than the knight then it also checks if the piece is blocked by using the not_blocked() function. (described above)</p>
+<h4><strong>4. move_piece()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">move_piece</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">):</span>
+    <span class="n">piece</span><span class="p">,</span> <span class="n">to_square</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+
+    <span class="n">capture</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span> <span class="ow">in</span> <span class="n">move</span>
+    <span class="k">if</span> <span class="n">capture</span><span class="p">:</span>
+        <span class="n">move</span> <span class="o">=</span> <span class="n">move</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">move</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">captured_piece</span> <span class="o">=</span> <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span>
+        <span class="n">piece_view</span><span class="p">[</span><span class="n">captured_piece</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">to_square</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">move</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">from_square</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">piece_view</span><span class="p">[</span><span class="n">piece</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">from_square</span> <span class="o">=</span> <span class="n">piece_view</span><span class="p">[</span><span class="n">piece</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">from_square</span> <span class="o">=</span> <span class="n">get_from_square</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">[</span><span class="n">piece</span><span class="p">])</span>
+
+    <span class="n">board_view</span><span class="p">[</span><span class="n">from_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+    <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">piece</span>
+
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">piece</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_square</span><span class="p">)</span>
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">piece</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">from_square</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span>
+</code></pre></div>
+
+
+<p>This function examines if the move is a capture. If it is a capture it removes the piece ot has captured i.e the piece at the final position and adds the piece which captured the other piece to the final position.</p>
+<p>If the current position is not found it generates the current position using the get_from_square() function (described above).
+Then it removes the piece from the current position and appends the piece in the new position.</p>
+</section>
+        <section id="extras" class="body">
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

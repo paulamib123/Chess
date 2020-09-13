@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Pawn</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Chess Project</a></h1>
+                <nav><ul>
+                    <li><a href="/pages/overview.html">Overview</a></li>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li><a href="/pages/checkmove.html">Checkmove</a></li>
+                    <li><a href="/pages/introduction.html">Introduction</a></li>
+                    <li><a href="/pages/driver-code.html">Driver Code</a></li>
+                    <li><a href="/pages/notation.html">Notation</a></li>
+                    <li class="active"><a href="/pages/pawn.html">Pawn</a></li>
+                    <li><a href="/pages/pgn-parser.html">PGN Parser</a></li>
+                    <li><a href="/pages/pieces.html">Pieces</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Pawn</h1>
+    
+    <p>This script consists of four small functions which checks if the move is a regular pawn move, pawn promotion, enpassant or a capture.
+They use regular expressions to check for the type of move.</p>
+<p>The four functions are as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_regular_pawn_move</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="s2">&quot;[Pp][a-h][2-7]&quot;</span><span class="p">,</span> <span class="n">move</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">is_capture</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="s2">&quot;[Pp][a-h]x?[a-h][2-7]?&quot;</span><span class="p">,</span> <span class="n">move</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">is_promotion</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="s2">&quot;[Pp][a-h](x[a-h])?[18])[RNBQrnbq]&quot;</span><span class="p">,</span> <span class="n">move</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">is_enpassant</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">move</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;ep&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h4><strong>1. capture()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">):</span>
+    <span class="n">move</span> <span class="o">=</span> <span class="n">move</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">pawn</span><span class="p">,</span> <span class="n">from_file</span><span class="p">,</span> <span class="n">to_square</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">captured_piece</span> <span class="o">=</span> <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span>
+    <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">pawn</span>
+
+    <span class="n">to_rank</span> <span class="o">=</span> <span class="n">to_square</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">from_square</span> <span class="o">=</span> <span class="n">from_file</span> <span class="o">+</span> <span class="n">can_capture_from</span><span class="p">[</span><span class="n">pawn</span><span class="p">][</span><span class="n">to_rank</span><span class="p">]</span>
+
+    <span class="n">board_view</span><span class="p">[</span><span class="n">from_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">captured_piece</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">to_square</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span>
+</code></pre></div>
+
+
+<p>This function checks if the letter "x" is present in the move i.e it checks if the move is a capture.</p>
+<p>Then it removes the piece which is captured and adds the piece which performed the capture to the final position and accordingly updates the board view and piece view.</p>
+<h4><strong>2. make_enpassant()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">make_enpassant</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">):</span>
+    <span class="n">move</span> <span class="o">=</span> <span class="n">move</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">pawn</span><span class="p">,</span> <span class="n">from_file</span><span class="p">,</span> <span class="n">to_square</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">to_file</span> <span class="o">=</span> <span class="n">to_square</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">from_square</span> <span class="o">=</span> <span class="n">from_file</span> <span class="o">+</span> <span class="n">enpassant_captured</span><span class="p">[</span><span class="n">pawn</span><span class="p">]</span>
+    <span class="n">captured_pawn_square</span> <span class="o">=</span> <span class="n">to_file</span> <span class="o">+</span> <span class="n">enpassant_captured</span><span class="p">[</span><span class="n">pawn</span><span class="p">]</span>
+
+    <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">pawn</span>
+    <span class="n">board_view</span><span class="p">[</span><span class="n">from_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+    <span class="n">board_view</span><span class="p">[</span><span class="n">captured_pawn_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">pawn</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">from_square</span><span class="p">)</span>
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">pawn</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_square</span><span class="p">)</span>
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">pawn</span><span class="o">.</span><span class="n">swapcase</span><span class="p">()]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">captured_pawn_square</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span>
+</code></pre></div>
+
+
+<p>This function checks if the move is an enpassant and then gets the current position of the pawn and the current position of the captured pawn as well as the final position of the pawn which has performed the capture and finally updates the board view and piece view by removing the captured pawn and adding the pawn which performed the capture to the final position.</p>
+<h4><strong>3. capture()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">):</span>
+    <span class="n">move</span> <span class="o">=</span> <span class="n">move</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">pawn</span><span class="p">,</span> <span class="n">from_file</span><span class="p">,</span> <span class="n">to_square</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">captured_piece</span> <span class="o">=</span> <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span>
+    <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">pawn</span>
+
+    <span class="n">to_rank</span> <span class="o">=</span> <span class="n">to_square</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">from_square</span> <span class="o">=</span> <span class="n">from_file</span> <span class="o">+</span> <span class="n">can_capture_from</span><span class="p">[</span><span class="n">pawn</span><span class="p">][</span><span class="n">to_rank</span><span class="p">]</span>
+
+    <span class="n">board_view</span><span class="p">[</span><span class="n">from_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+    <span class="n">piece_view</span><span class="p">[</span><span class="n">captured_piece</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">to_square</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span>
+</code></pre></div>
+
+
+<p>This function gets the current position of the pawn and the final position of the pawn i.e the position at which the captured piece is present and then it removes the captured pawn and adds the pawn which performed the capture to the position of the captured piece.</p>
+<h4><strong>4. move_pawn()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">move_pawn</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span><span class="n">piece_view</span><span class="p">):</span>
+    <span class="n">pawn</span><span class="p">,</span> <span class="n">to_square</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">to_file</span><span class="p">,</span> <span class="n">to_rank</span> <span class="o">=</span> <span class="n">to_square</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">to_square</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">for</span> <span class="n">move_from</span> <span class="ow">in</span> <span class="n">can_move_from</span><span class="p">[</span><span class="n">pawn</span><span class="p">][</span><span class="n">to_rank</span><span class="p">]:</span>
+        <span class="n">from_square</span> <span class="o">=</span> <span class="n">to_file</span> <span class="o">+</span> <span class="n">move_from</span>
+        <span class="k">if</span> <span class="n">board_view</span><span class="p">[</span><span class="n">from_square</span><span class="p">]</span> <span class="o">==</span> <span class="n">pawn</span><span class="p">:</span>
+            <span class="n">board_view</span><span class="p">[</span><span class="n">from_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPACE</span>
+            <span class="n">board_view</span><span class="p">[</span><span class="n">to_square</span><span class="p">]</span> <span class="o">=</span> <span class="n">pawn</span>
+            <span class="n">piece_view</span><span class="p">[</span><span class="n">pawn</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_square</span><span class="p">)</span>
+            <span class="n">piece_view</span><span class="p">[</span><span class="n">pawn</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">from_square</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span>
+</code></pre></div>
+
+
+<p>This function performs a regular pawn move.</p>
+<p>It gets the current position and the final position of the pawn and makes the move by removing the pawn from the initial position and adding the pawn to the final position.</p>
+<h4><strong>5. make_pawn_move()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">make_pawn_move</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">is_regular_pawn_move</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">move_pawn</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_capture</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">capture</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_promotion</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">promote</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_enpassant</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">make_enpassant</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>This function checks if the move is a regular pawn move, enpassant, pawn promotion or a pawn capture and then calls the required function accordingly to perform the move.</p>
+</section>
+        <section id="extras" class="body">
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

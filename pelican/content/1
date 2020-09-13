@@ -1,0 +1,16 @@
+Title: Overview of my chess project
+Date: 2020-05-12 12:36
+
+The chess project consists of four python scripts and are as follows:
+
+#### 1. checkmove.py
+This python script determines weather a move is valid or not.
+
+#### 2. pawn.py
+This python script handles all the moves that can be made by a pawn.
+
+#### 3. piece.py
+This python script handles all the moves that can be made by all the other pieces except the pawns.
+
+#### 4. main.py
+This python script is the main driver code.

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Driver Code</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Chess Project</a></h1>
+                <nav><ul>
+                    <li><a href="/pages/overview.html">Overview</a></li>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li><a href="/pages/checkmove.html">Checkmove</a></li>
+                    <li><a href="/pages/introduction.html">Introduction</a></li>
+                    <li class="active"><a href="/pages/driver-code.html">Driver Code</a></li>
+                    <li><a href="/pages/notation.html">Notation</a></li>
+                    <li><a href="/pages/pawn.html">Pawn</a></li>
+                    <li><a href="/pages/pgn-parser.html">PGN Parser</a></li>
+                    <li><a href="/pages/pieces.html">Pieces</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Driver Code</h1>
+    
+    <p>This is the main script of the program
+It has the following functions:</p>
+<h4><strong>1. setup()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">setup</span><span class="p">():</span>
+    <span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="s1">&#39;12345678&#39;</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="s1">&#39;ABCDEFGH&#39;</span><span class="p">]</span>
+    <span class="n">board_view</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">squares</span><span class="p">,</span> <span class="n">START</span><span class="p">))</span>
+    <span class="n">piece_view</span> <span class="o">=</span> <span class="p">{</span><span class="n">_</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="s1">&#39;BKNPQRbknpqr&#39;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">square</span> <span class="ow">in</span> <span class="n">squares</span><span class="p">:</span>
+        <span class="n">piece</span> <span class="o">=</span> <span class="n">board_view</span><span class="p">[</span><span class="n">square</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">piece</span> <span class="o">!=</span> <span class="n">SPACE</span><span class="p">:</span>
+            <span class="n">piece_view</span><span class="p">[</span><span class="n">piece</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">square</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span>
+</code></pre></div>
+
+
+<p>The setup function is used to generate the board view and the piece view.</p>
+<h5><strong>Output Example:-</strong></h5>
+<p><strong>Board View</strong></p>
+<p><em>{'A1': 'R', 'B1': 'N', 'C1': 'B', 'D1': 'Q', 'E1': 'K', 'F1': 'B', 'G1': 'N', 'H1': 'R', 'A2': 'P', 'B2': 'P', 'C2': 'P', 'D2': 'P', 'E2': 'P', 'F2': 'P', 'G2': 'P', 'H2': 'P', 'A3': ' ', 'B3': ' ', 'C3': ' ', 'D3': ' ', 'E3': ' ', 'F3': ' ', 'G3': ' ', 'H3': ' ', 'A4': ' ', 'B4': ' ', 'C4': ' ', 'D4': ' ', 'E4': ' ', 'F4': ' ', 'G4': ' ', 'H4': ' ', 'A5': ' ', 'B5': ' ', 'C5': ' ', 'D5': ' ', 'E5': ' ', 'F5': ' ', 'G5': ' ', 'H5': ' ', 'A6': ' ', 'B6': ' ', 'C6': ' ', 'D6': ' ', 'E6': ' ', 'F6': ' ', 'G6': ' ', 'H6': ' ', 'A7': 'p', 'B7': 'p', 'C7': 'p', 'D7': 'p', 'E7': 'p', 'F7': 'p', 'G7': 'p', 'H7': 'p', 'A8': 'r', 'B8': 'n', 'C8': 'b', 'D8': 'q', 'E8': 'k', 'F8': 'b', 'G8': 'n', 'H8': 'r'}</em></p>
+<p><strong>Piece View</strong></p>
+<p><em>{'B': ['C1', 'F1'], 'K': ['E1'], 'N': ['B1', 'G1'], 'P': ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2'], 'Q': ['D1'], 'R': ['A1', 'H1'], 'b': ['C8', 'F8'], 'k': ['E8'], 'n': ['B8', 'G8'], 'p': ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7', 'H7'], 'q': ['D8'], 'r': ['A8', 'H8']}</em></p>
+<h4><strong>2. make_one_move()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">make_one_move</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s2">&quot;Pp&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pawn</span><span class="o">.</span><span class="n">make_pawn_move</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;Oo&quot;</span> <span class="ow">in</span> <span class="n">move</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pieces</span><span class="o">.</span><span class="n">castle</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pieces</span><span class="o">.</span><span class="n">move_piece</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>This function first checks if a move starts with the letter "P" or "p". If it starts with a "P" or "p" it makes a pawn move by calling the function make_pawn_move().</p>
+<p>Next it checks if a move has "O" or "o" in it i.e if it is a castling move. If it is a castling move then it performs the castle by calling the castle() function.</p>
+<p>If it does not satisfy any of the conditions above then it means it is a piece move and it calls the function move_piece() and makes the piece move.</p>
+<h4><strong>3. display_position()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">display_position</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>This function prints the current board view.</p>
+<h4><strong>4. make_moves()</strong></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">make_moves</span><span class="p">(</span><span class="n">pgnfile</span><span class="p">,</span> <span class="n">MOVE_BY_MOVE</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pgnfile</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;PGN File </span><span class="si">{</span><span class="n">pgnfile</span><span class="si">}</span><span class="s1"> not found&#39;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
+
+    <span class="n">moves</span> <span class="o">=</span> <span class="n">pgnparser</span><span class="o">.</span><span class="n">pgn_to_moves</span><span class="p">(</span><span class="n">pgnfile</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">wmove</span><span class="p">,</span> <span class="n">bmove</span> <span class="ow">in</span> <span class="n">moves</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span> <span class="o">=</span> <span class="n">make_one_move</span><span class="p">(</span><span class="n">wmove</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+        <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span> <span class="o">=</span> <span class="n">make_one_move</span><span class="p">(</span><span class="n">bmove</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">MOVE_BY_MOVE</span><span class="p">:</span>
+            <span class="n">display_position</span><span class="p">(</span><span class="n">board_view</span><span class="p">)</span>
+
+    <span class="n">wmove</span><span class="p">,</span> <span class="n">bmove</span> <span class="o">=</span> <span class="n">moves</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span> <span class="o">=</span> <span class="n">make_one_move</span><span class="p">(</span><span class="n">wmove</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bmove</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span> <span class="o">=</span> <span class="n">make_one_move</span><span class="p">(</span><span class="n">bmove</span><span class="p">,</span> <span class="n">board_view</span><span class="p">,</span> <span class="n">piece_view</span><span class="p">)</span>
+    <span class="n">display_position</span><span class="p">(</span><span class="n">board_view</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>This function loops through the list of tuples of the moves generated by parsing the pgn file and gets the white move and the black move seperately and makes a single move first using the white move and then another single move by using the black move with the help of the make_one_move() function and displays the final board view.</p>
+</section>
+        <section id="extras" class="body">
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

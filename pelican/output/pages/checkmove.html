@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Checkmove</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Chess Project</a></h1>
+                <nav><ul>
+                    <li><a href="/pages/overview.html">Overview</a></li>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li class="active"><a href="/pages/checkmove.html">Checkmove</a></li>
+                    <li><a href="/pages/introduction.html">Introduction</a></li>
+                    <li><a href="/pages/driver-code.html">Driver Code</a></li>
+                    <li><a href="/pages/notation.html">Notation</a></li>
+                    <li><a href="/pages/pawn.html">Pawn</a></li>
+                    <li><a href="/pages/pgn-parser.html">PGN Parser</a></li>
+                    <li><a href="/pages/pieces.html">Pieces</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Checkmove</h1>
+    
+    <p>The checkmove script contains the following function:</p>
+<h3><strong>1. check_move()</strong></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">check_move</span><span class="p">(</span><span class="n">piece</span><span class="p">,</span> <span class="n">initial_position</span><span class="p">,</span> <span class="n">final_position</span><span class="p">):</span>
+
+<span class="c1"># alpha_to_index is a global variable defined as below:</span>
+<span class="c1"># alpha_to_index = {&#39;a&#39;: &#39;1&#39;, &#39;b&#39;: &#39;2&#39;, &#39;c&#39;: &#39;3&#39;, &#39;d&#39;: &#39;4&#39;, &#39;e&#39;: &#39;5&#39;, &#39;f&#39;: &#39;6&#39;, &#39;g&#39;: &#39;7&#39;, &#39;h&#39;: &#39;8&#39;}</span>
+
+    <span class="n">r1</span><span class="p">,</span> <span class="n">f1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">alpha_to_index</span><span class="p">[</span><span class="n">initial_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">initial_position</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">r2</span><span class="p">,</span> <span class="n">f2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">alpha_to_index</span><span class="p">[</span><span class="n">final_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">final_position</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r2</span> <span class="o">-</span> <span class="n">r1</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f2</span> <span class="o">-</span> <span class="n">f1</span><span class="p">))</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">f1</span> <span class="o">==</span> <span class="n">f2</span> <span class="ow">or</span> <span class="n">r1</span> <span class="o">==</span> <span class="n">r2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r2</span> <span class="o">-</span> <span class="n">r1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r1</span> <span class="o">==</span> <span class="n">r2</span> <span class="ow">or</span> <span class="n">f1</span> <span class="o">==</span> <span class="n">f2</span>
+
+    <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">&quot;kn&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">f2</span> <span class="o">-</span> <span class="n">f1</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r2</span> <span class="o">-</span> <span class="n">r1</span><span class="p">))</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f2</span> <span class="o">-</span> <span class="n">f1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r2</span> <span class="o">-</span> <span class="n">r1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r2</span> <span class="o">==</span> <span class="n">r1</span> <span class="ow">and</span> <span class="n">f2</span> <span class="o">-</span> <span class="n">f1</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r2</span> <span class="o">==</span> <span class="n">r1</span> <span class="ow">and</span> <span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre></div>
+
+
+<p>This function converts the initial position and the final position in the form of co-ordinates.</p>
+<p><strong>Example:</strong><br>
+        Position = e4<br>
+        co-ordinates = (5, 4) </p>
+<p>Then it checks if the piece is a king, queen, bishop, rook, knight or a pawn and if the move is valid from the initial position to the final position.</p>
+</section>
+        <section id="extras" class="body">
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

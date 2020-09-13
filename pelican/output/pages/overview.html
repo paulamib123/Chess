@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Overview</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Chess Project</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/pages/overview.html">Overview</a></li>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li><a href="/pages/checkmove.html">Checkmove</a></li>
+                    <li><a href="/pages/introduction.html">Introduction</a></li>
+                    <li><a href="/pages/driver-code.html">Driver Code</a></li>
+                    <li><a href="/pages/notation.html">Notation</a></li>
+                    <li><a href="/pages/pawn.html">Pawn</a></li>
+                    <li><a href="/pages/pgn-parser.html">PGN Parser</a></li>
+                    <li><a href="/pages/pieces.html">Pieces</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Overview</h1>
+    
+    <h3><strong>Input Format</strong></h3>
+<p>The input is a pgnfile in text format.</p>
+<h3><strong>Output Format</strong></h3>
+<p>The output is the board view which is in the form of a dictionary where the key is the name of the block and the value is the piece present on that block.</p>
+<p>The chess project consists of four python scripts and are as follows:</p>
+<h3><strong>1. checkmove.py</strong></h3>
+<p>This python script determines weather a move is valid or not.</p>
+<h3><strong>2. pgnparser.py</strong></h3>
+<p>This python script is used to parse the pgn file and finally obtain the moves in the form of alphanumericals.</p>
+<h3><strong>3. pawn.py</strong></h3>
+<p>This python script handles all the moves that can be made by a pawn.</p>
+<h3><strong>4. piece.py</strong></h3>
+<p>This python script handles all the moves that can be made by all the other pieces except the pawns.</p>
+<h3><strong>5. main.py</strong></h3>
+<p>This python script is the main driver code.</p>
+</section>
+        <section id="extras" class="body">
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

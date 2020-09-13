@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>PGN Parser</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Chess Project</a></h1>
+                <nav><ul>
+                    <li><a href="/pages/overview.html">Overview</a></li>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li><a href="/pages/checkmove.html">Checkmove</a></li>
+                    <li><a href="/pages/introduction.html">Introduction</a></li>
+                    <li><a href="/pages/driver-code.html">Driver Code</a></li>
+                    <li><a href="/pages/notation.html">Notation</a></li>
+                    <li><a href="/pages/pawn.html">Pawn</a></li>
+                    <li class="active"><a href="/pages/pgn-parser.html">PGN Parser</a></li>
+                    <li><a href="/pages/pieces.html">Pieces</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">PGN Parser</h1>
+    
+    <p>The pgn parser script conatains the following functions:</p>
+<h3><strong>1. pre_process_a_move()</strong></h3>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">pre_process_a_move</span><span class="p">(</span><span class="n">move</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">wmove</span><span class="p">,</span> <span class="n">bmove</span> <span class="o">=</span> <span class="n">move</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">wmove</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">FILES</span> <span class="ow">and</span> <span class="n">wmove</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">RANKS</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+            <span class="n">wmove</span> <span class="o">=</span> <span class="s2">&quot;P&quot;</span> <span class="o">+</span> <span class="n">wmove</span>
+            <span class="k">if</span> <span class="n">bmove</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">FILES</span> <span class="ow">and</span> <span class="n">bmove</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">RANKS</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+            <span class="n">bmove</span> <span class="o">=</span> <span class="s2">&quot;p&quot;</span> <span class="o">+</span> <span class="n">bmove</span>
+            <span class="k">else</span><span class="p">:</span>
+            <span class="n">bmove</span> <span class="o">=</span> <span class="n">bmove</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">clean</span><span class="p">(</span><span class="n">wmove</span><span class="p">),</span> <span class="n">clean</span><span class="p">(</span><span class="n">bmove</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>This function adds "P" to a white pawn and "p" to a black pawn and converts all the pieces of the black move to lowercase (as black pieces are represented by lowercase notation)</p>
+<h3><strong>2. pre_process_last_move()</strong></h3>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">pre_process_last_move</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">SPACE</span> <span class="ow">in</span> <span class="n">move</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pre_process_a_move</span><span class="p">(</span><span class="n">move</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s2">&quot;abcdefgh&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;P&quot;</span> <span class="o">+</span> <span class="n">clean</span><span class="p">(</span><span class="n">move</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">clean</span><span class="p">(</span><span class="n">move</span><span class="p">),</span>
+</code></pre></div>
+
+
+<p>This function pre process the last move in a similar way as the previous function( 2. pre_process_a_move()).</p>
+<h3><strong>3. clean()</strong></h3>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="n">raw_move</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">isalnum</span><span class="p">,</span> <span class="n">raw_move</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p>This function is used to remove any special symbols or punctuations and return the move in the form of alpha numeicals only.</p>
+<h3><strong>4. pgn_to_moves()</strong></h3>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">pgn_to_moves</span><span class="p">(</span><span class="n">game_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">raw_pgn</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">game_file</span><span class="p">)])</span>
+        <span class="n">comments_marked</span> <span class="o">=</span> <span class="n">raw_pgn</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+        <span class="n">comments_removed</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&lt;[^&gt;]*&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">comments_marked</span><span class="p">)</span>
+
+        <span class="n">str_marked</span> <span class="o">=</span> <span class="n">comments_removed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+        <span class="n">str_removed</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&lt;[^&gt;]*&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">str_marked</span><span class="p">)</span>
+
+        <span class="n">move_num</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;[1-9][0-9]* *\.&quot;</span><span class="p">)</span>
+        <span class="n">just_moves</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">move_num</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">str_removed</span><span class="p">)]</span>
+
+        <span class="n">last_move</span> <span class="o">=</span> <span class="n">just_moves</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;( *1 *- *0 * | *0 *- *1 * | *1/2 *- *1/2 *)&quot;</span><span class="p">)</span>
+        <span class="n">last_move</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">last_move</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">pre_process_a_move</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">just_moves</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="n">pre_process_last_move</span><span class="p">(</span><span class="n">last_move</span><span class="p">)]</span>
+</code></pre></div>
+
+
+<p>This function removes all comments from the pgn file which are of the format{ }, [ ] and even the number of the move and replaces them with an empty string.  <br>
+This is done by using regular expressions.</p>
+<p>This function returns a list of tuples of the moves in the pgn file.</p>
+<h4><strong>Output Example: -</strong></h4>
+<p><em>[('Pe4', 'pe5'), ('Nf3', 'nc6'), ('Bb5', 'pa6'), ('Ba4', 'nf6'), ('OO', 'be7'), ('Re1', 'pb5'), ('Bb3', 'pd6'), ('Pc3', 'oo'), ('Ph3', 'nb8'), ('Pd4', 'nbd7'), ('Pc4', 'pc6'), ('Pcxb5', 'paxb5'), ('Nc3', 'bb7'), ('Bg5', 'pb4'), ('Nb1', 'ph6'), ('Bh4', 'pc5'), ('Pdxe5', 'nxe4'), ('Bxe7', 'qxe7'), ('Pexd6', 'qf6'), ('Nbd2', 'nxd6'), ('Nc4', 'nxc4'), ('Bxc4', 'nb6'), ('Ne5', 'rae8'), ('Bxf7', 'rxf7'), ('Nxf7', 'rxe1'), ('Qxe1', 'kxf7'), ('Qe3', 'qg5'), ('Qxg5', 'phxg5'), ('Pb3', 'ke6'), ('Pa3', 'kd6'), ('Paxb4', 'pcxb4'), ('Ra5', 'nd5'), ('Pf3', 'bc8'), ('Kf2', 'bf5'), ('Ra7', 'pg6'), ('Ra6', 'kc5'), ('Ke1', 'nf4'), ('Pg3', 'nxh3'), ('Kd2', 'kb5'), ('Rd6', 'kc5'), ('Ra6', 'nf2'), ('Pg4', 'bd3'), ('Re6',)]</em></p>
+</section>
+        <section id="extras" class="body">
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

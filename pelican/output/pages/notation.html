@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Notation</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Chess Project</a></h1>
+                <nav><ul>
+                    <li><a href="/pages/overview.html">Overview</a></li>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li><a href="/pages/checkmove.html">Checkmove</a></li>
+                    <li><a href="/pages/introduction.html">Introduction</a></li>
+                    <li><a href="/pages/driver-code.html">Driver Code</a></li>
+                    <li class="active"><a href="/pages/notation.html">Notation</a></li>
+                    <li><a href="/pages/pawn.html">Pawn</a></li>
+                    <li><a href="/pages/pgn-parser.html">PGN Parser</a></li>
+                    <li><a href="/pages/pieces.html">Pieces</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Notation</h1>
+    
+    <h3><strong>Some notations for this code</strong></h3>
+<h5><strong>1. Notation for pieces</strong></h5>
+<p>k -&gt; king<br>
+r -&gt; rook<br>
+b -&gt; bishop<br>
+q -&gt; queen<br>
+p -&gt; pawn<br>
+n -&gt; knight  </p>
+<p>All the black pieces are represented by using small letters.<br>
+All the white pieces are represented by using capital letters.  </p>
+<p>An empty block is represented by a space.</p>
+<h5><strong>2. Notation for moves</strong></h5>
+<p><strong>a. Notation for Piece Capture</strong></p>
+<p>When a piece makes a capture, an x is inserted between the initial and the destination square.  </p>
+<p>For example, Bxe5 (bishop captures the piece on e5).</p>
+<p><strong>b. Notation for Pawn Capture</strong></p>
+<p>When a pawn makes a capture, the file from which the pawn departed is used in place of a piece initial.  </p>
+<p>For example, exd5 (pawn on the e-file captures the piece on d5).</p>
+<p><strong>c. Notation for Pawn Promotion</strong></p>
+<p>If a pawn moves to its last rank, achieving promotion, the piece chosen is indicated after the move. </p>
+<p>For example, f8Q, f8B</p>
+<p><strong>d. Notation for Castling</strong></p>
+<ol>
+<li>
+<p>Queenside Castling<br>
+It is indicated by O-O-O</p>
+</li>
+<li>
+<p>Kingside Castling<br>
+It is indicated by O-O</p>
+</li>
+</ol>
+<p><strong>e. Notation for Enpassant</strong></p>
+<p>If the move ends with ep it is an enpassant move.</p>
+<p>For example, exd6ep</p>
+</section>
+        <section id="extras" class="body">
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
